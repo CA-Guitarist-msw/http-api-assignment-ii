@@ -24,6 +24,27 @@ const urlStruct = {
   },
 };
 
+const parseBody = (request, response, handler) => {
+  const body = [];
+
+  request.on('error', (err) => {
+    console.dir(err);
+    response.statusCode = 400;
+    response.end();
+  });
+
+  request.on('data', (chunk) => {
+    body.push(chunk);
+  });
+
+  request.on('end', () => {
+    const bodyString = Buffer.concat(body).toString();
+    const bodyParams = query.parse(bodyString);
+
+    handler(request, response, bodyParams);
+  });
+};
+
 const onRequest = (request, response) => {
   console.log(request.url);
 
@@ -31,6 +52,10 @@ const onRequest = (request, response) => {
 
   if (!urlStruct[request.method]) {
     return urlStruct.HEAD.notFound(request, response);
+  }
+
+  if (request.method === 'POST') {
+    parseBody(request, response, otherHandler.addUser);
   }
 
   if (urlStruct[request.method][parsedUrl.pathname]) {
