@@ -32,32 +32,45 @@ const getUsersHead = (request, response) => {
 };
 
 const addUser = (request, response, body) => {
-    const responseJSON = {
-        message: 'Name and age are both required.',
-    };
+  const responseJSON = {
+    message: 'Name and age are both required.',
+  };
 
-    if (!body.name || !body.age) {
-        responseJSON.id = 'missingParams';
-        return basicResponse(request, response, 400, responseJSON);
-    }
+  if (!body.name || !body.age) {
+    responseJSON.id = 'missingParams';
+    return basicResponse(request, response, 400, responseJSON);
+  }
 
-    let responseCode = 204;
+  let responseCode = 204;
 
-    if (!users[body.name]) {
-        responseCode = 201;
-        users[body.name] = {};
-    }
+  if (!users[body.name]) {
+    responseCode = 201;
+    users[body.name] = {};
+  }
 
-    users[body.name].name = body.name;
-    users[body.age].name = body.age;
+  users[body.name].name = body.name;
+  users[body.age].name = body.age;
 
-    if (responseCode === 201) {
-        responseJSON.message = 'Created Successfully';
-        return basicResponse(request, response, responseCode, responseJSON)
-    }
+  if (responseCode === 201) {
+    responseJSON.message = 'Created Successfully';
+    return basicResponse(request, response, responseCode, responseJSON);
+  }
 
-    return basicResponseHead(request, response, responseCode);
-}
+  return basicResponseHead(request, response, responseCode);
+};
+
+const notReal = (request, response) => {
+  const responseJSON = {
+    message: 'The user you requested is not real',
+    id: 'notReal',
+  };
+
+  basicResponse(request, response, 404, responseJSON);
+};
+
+const notRealHead = (request, response) => {
+  basicResponseHead(request, response, 404);
+};
 
 const notFound = (request, response) => {
   const responseJSON = {
@@ -78,6 +91,8 @@ module.exports = {
   getUsers,
   getUsersHead,
   addUser,
+  notReal,
+  notRealHead,
   notFound,
   notFoundHead,
 };

@@ -11,16 +11,16 @@ const urlStruct = {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
     '/getUsers': otherHandler.getUsers,
-    '/notReal': htmlHandler.getIndex,
+    '/notReal': otherHandler.notReal,
     notFound: otherHandler.notFound,
   },
   HEAD: {
     '/getUsers': otherHandler.getUsersHead,
-    '/notReal': htmlHandler.getIndex,
+    '/notReal': otherHandler.notReal,
     notFound: otherHandler.notFoundHead,
   },
   POST: {
-    '/addUser': htmlHandler.getIndex,
+    '/addUser': otherHandler.addUser,
   },
 };
 
