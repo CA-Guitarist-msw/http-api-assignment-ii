@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const otherHandler = require('./otherResponses.js');
 
@@ -9,10 +10,17 @@ const urlStruct = {
   GET: {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
+    '/getUsers': otherHandler.getUsers,
+    '/notReal': htmlHandler.getIndex,
     notFound: otherHandler.notFound,
   },
   HEAD: {
+    '/getUsers': otherHandler.getUsersHead,
+    '/notReal': htmlHandler.getIndex,
     notFound: otherHandler.notFoundHead,
+  },
+  POST: {
+    '/addUser': htmlHandler.getIndex,
   },
 };
 

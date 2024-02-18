@@ -19,6 +19,46 @@ const basicResponseHead = (request, response, status) => {
   response.end();
 };
 
+const getUsers = (request, response) => {
+  const responseJSON = {
+    users,
+  };
+
+  return basicResponse(request, response, 200, responseJSON);
+};
+
+const getUsersHead = (request, response) => {
+  basicResponseHead(request, response, 200);
+};
+
+const addUser = (request, response, body) => {
+    const responseJSON = {
+        message: 'Name and age are both required.',
+    };
+
+    if (!body.name || !body.age) {
+        responseJSON.id = 'missingParams';
+        return basicResponse(request, response, 400, responseJSON);
+    }
+
+    let responseCode = 204;
+
+    if (!users[body.name]) {
+        responseCode = 201;
+        users[body.name] = {};
+    }
+
+    users[body.name].name = body.name;
+    users[body.age].name = body.age;
+
+    if (responseCode === 201) {
+        responseJSON.message = 'Created Successfully';
+        return basicResponse(request, response, responseCode, responseJSON)
+    }
+
+    return basicResponseHead(request, response, responseCode);
+}
+
 const notFound = (request, response) => {
   const responseJSON = {
     message: 'The page you request was not found.',
@@ -35,6 +75,9 @@ const notFoundHead = (request, response) => {
 module.exports = {
   basicResponse,
   basicResponseHead,
+  getUsers,
+  getUsersHead,
+  addUser,
   notFound,
   notFoundHead,
 };
