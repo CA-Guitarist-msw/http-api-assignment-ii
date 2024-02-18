@@ -1,6 +1,5 @@
 const http = require('http');
 const url = require('url');
-const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const otherHandler = require('./otherResponses.js');
 
@@ -10,7 +9,10 @@ const urlStruct = {
   GET: {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
-    notFound: htmlHandler.getIndex,
+    notFound: otherHandler.notFound,
+  },
+  HEAD: {
+    notFound: otherHandler.notFoundHead,
   },
 };
 
@@ -18,14 +20,16 @@ const onRequest = (request, response) => {
   console.log(request.url);
 
   const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl.query);
-  const acceptedType = request.headers.accept.split(',');
 
-  if (urlStruct[parsedUrl.pathname]) {
-    return urlStruct[parsedUrl.pathname](request, response, params, acceptedType);
+  if (!urlStruct[request.method]) {
+    return urlStruct.HEAD.notFound(request, response);
   }
 
-  return urlStruct.notFound(request, response, params, acceptedType);
+  if (urlStruct[request.method][parsedUrl.pathname]) {
+    return urlStruct[request.method][parsedUrl.pathname](request, response);
+  }
+
+  return urlStruct[request.method].notFound(request, response);
 };
 
 http.createServer(onRequest).listen(port, () => {
