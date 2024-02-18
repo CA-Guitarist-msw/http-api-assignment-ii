@@ -54,8 +54,8 @@ const onRequest = (request, response) => {
     return urlStruct.HEAD.notFound(request, response);
   }
 
-  if (request.method === 'POST') {
-    parseBody(request, response, otherHandler.addUser);
+  if (request.method === 'POST' && parsedUrl.pathname === '/addUser') {
+    return parseBody(request, response, otherHandler.addUser);
   }
 
   if (urlStruct[request.method][parsedUrl.pathname]) {

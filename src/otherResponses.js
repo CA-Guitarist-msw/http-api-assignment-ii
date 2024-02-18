@@ -49,7 +49,7 @@ const addUser = (request, response, body) => {
   }
 
   users[body.name].name = body.name;
-  users[body.age].name = body.age;
+  users[body.name].age = body.age;
 
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';

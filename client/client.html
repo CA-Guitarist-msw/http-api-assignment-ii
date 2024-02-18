@@ -31,7 +31,7 @@
       }
 
       if (parseResponse) {
-        let obj = await response.json();
+        const obj = await response.json();
 
         let jsonString = JSON.stringify(obj);
         content.innerHTML += `<p>${jsonString}</p>`;
@@ -58,7 +58,7 @@
         body: formData,
       });
 
-      handleResponse(response);
+      handleResponse(response, true);
     }
 
     const requestUpdate = async (userForm) => {
@@ -70,7 +70,9 @@
         headers: {
           'Accept': 'application/json'
         },
-      })
+      });
+
+      handleResponse(response, method === 'get')
     }
 
     const init = () => {
